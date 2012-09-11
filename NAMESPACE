@@ -1,0 +1,5 @@
+exportPattern("^[[:alpha:]]+")
+S3method(print, ldr)
+S3method(print, structure)
+S3method(print, summary.ldr)
+S3method(summary, ldr)
