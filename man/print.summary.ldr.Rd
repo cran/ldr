@@ -10,7 +10,7 @@ Internal function to print an ldr summary object.
 \method{print}{summary.ldr}(x,...)
 }
 \arguments{
-  \item{object}{
+  \item{x}{
 A summary object of class \code{sldr}.
 }
   \item{...}{

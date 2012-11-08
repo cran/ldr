@@ -8,7 +8,7 @@ Method to estimate the central subspace, using inverse conditional mean and cond
 }
 \usage{
 lad(X, y, ycat=TRUE, numdir=2, nslices=NULL, verbose=FALSE, 
-short=TRUE, ...)
+    short=TRUE, ...)
 }
 \arguments{
   \item{X}{Data matrix with \code{n} rows of observations and \code{p} columns of predictors. 
@@ -68,12 +68,10 @@ Kofi Placid Adragni <kofi@umbc.edu>
 }
 
 \examples{
-
-library(GrassmannOptim)
+\dontrun{
 data(flea) 
-Levels <- unique(flea[,1]); 
 X <- flea[,-1]
-y<-as.integer(factor(flea[,1], levels=Levels))
+y<-as.integer(factor(flea[,1], levels=unique(flea[,1])))
 fit <- lad(X=X, y=y, numdir=2, verbose=TRUE)
 summary(fit)
 V<- t(fit$Gammahat)\%*\%t(X)
@@ -83,6 +81,6 @@ mycol[mycol==2]<-"blue"
 mycol[mycol==3]<-"green"
 plot(V[1,], V[2,], xlab="Dir1", ylab="Dir2", pch=as.numeric(y), 
 cex=1.50, col=mycol)
-
+}
 }
 

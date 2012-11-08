@@ -1,23 +1,26 @@
 core <-
-function(X, y, numdir=2, verbose=FALSE, short=TRUE, ...)
+function(X, y, Sigmas=NULL, ns=NULL, numdir=2, verbose=FALSE, short=TRUE,...)
 {
 	mf <- match.call()
 
-	hlevels <- unique(y); p <- ncol(X);
+	if (!is.null(Sigmas)){ p <- dim(Sigmas[[1]])[1]; h <- length(Sigmas)}
 
-	Sigmas <-list(); nn <- vector(length=length(hlevels));
-
-	for (h in 1:length(hlevels)) 
+	if (is.null(Sigmas) & is.null(ns))
 	{
-		nn[h] <- sum(y==h);
+		hlevels <- unique(y); p <- ncol(X);
+
+		Sigmas <-list(); ns <- vector(length=length(hlevels));
+
+		for (h in 1:length(hlevels)) 
+		{
+			ns[h] <- sum(y==h);
  
-		tempX <- X[y==h,]; 
+			tempX <- X[y==h,]; 
 
-		Sigmas[[h]] <- t(tempX)%*%tempX/nn[h];
-	}
-	n <- sum(nn); ff <- nn / n;
-
-	d <- numdir;
+			Sigmas[[h]] <- t(tempX)%*%tempX/ns[h];
+		}
+	} 
+	n <- sum(ns); ff <- ns/n; d <- numdir;
 
 	one.core <- function(d)
 	{
@@ -51,7 +54,7 @@ function(X, y, numdir=2, verbose=FALSE, short=TRUE, ...)
 
 			term3 <- 0;
 
-			for (g in 1:h){term3 <- term3 + nn[g]/2 * log(det(Sigmas[[g]]))}
+			for (g in 1:h){term3 <- term3 + ns[g]/2 * log(det(Sigmas[[g]]))}
 
 			loglik <- Re(term0 - term1 + term2 - term3)
 		}
@@ -63,7 +66,7 @@ function(X, y, numdir=2, verbose=FALSE, short=TRUE, ...)
 
 				Sigmas <- W$Sigmas;
 
-				n <- sum(W$nn);
+				n <- sum(W$ns);
 
 				U <- matrix(Q[,1:d], ncol=d);
 
@@ -85,7 +88,7 @@ function(X, y, numdir=2, verbose=FALSE, short=TRUE, ...)
 
 				term3 <- 0;
 
-				for (g in 1:h){term3 <- term3 + nn[g]/2 * log(det(t(U) %*% Sigmas[[g]] %*% U))}
+				for (g in 1:h){term3 <- term3 + ns[g]/2 * log(det(t(U) %*% Sigmas[[g]] %*% U))}
 
 				value <- Re(term0 - term1 + term2 - term3)
 
@@ -93,7 +96,7 @@ function(X, y, numdir=2, verbose=FALSE, short=TRUE, ...)
 			}
 			objfun <- assign("objfun", objfun, envir=.GlobalEnv); 
 
-			W <- list(dim=c(d, p), Sigmas=Sigmas, nn=nn);
+			W <- list(dim=c(d, p), Sigmas=Sigmas, ns=ns);
 
 			grassmann <- GrassmannOptim(objfun, W, verbose=verbose,...);
 
@@ -112,12 +115,9 @@ function(X, y, numdir=2, verbose=FALSE, short=TRUE, ...)
 
 		for (g in 1:h)
 		{
-			if (d == 0)
-			{
-				Sigmas.hat[[g]] <- Sigma.hat
+			if (d == 0){Sigmas.hat[[g]] <- Sigma.hat
 			}
-			else
-			{
+			else{	
 				Sigmas.hat[[g]] <- Sigma.hat + t(Ps.hat) %*% ( Sigmas[[g]] - Sigma.hat) %*% Ps.hat
 			}
 		}
@@ -130,6 +130,7 @@ function(X, y, numdir=2, verbose=FALSE, short=TRUE, ...)
 		return(list(Gammahat=Gamma.hat, Sigmahat = Sigma.hat, Sigmashat = Sigmas.hat,
 			loglik=loglik, numpar=numpar, aic=aic, bic=bic))
 	}
+
 	if (short)
 	{
 		fit <- one.core(d);

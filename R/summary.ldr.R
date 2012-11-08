@@ -1,5 +1,5 @@
 summary.ldr <-
-function(object, y=NULL, ...)
+function(object, y=NULL,...)
 {
 	mf <- match.call();
 

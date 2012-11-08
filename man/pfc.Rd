@@ -7,8 +7,7 @@ Principal fitted components model for sufficient dimension reduction. This funct
 }
 \usage{
 pfc(X, fy=fy, numdir=2, structure = c("iso", "aniso", "unstr", 
-"iso2", "aniso2", "un.iso", "un.aniso", "unstr2"), eps_aniso=0.01, 
-verbose=FALSE, short=TRUE, ...)
+"unstr2"), eps_aniso=0.01, verbose=FALSE, short=TRUE, ...)
 }
 \arguments{
   \item{X}{
@@ -25,12 +24,11 @@ The number of directions to be used in estimating the reduction subspace.
 The dimension must be less than or equal to the minimum of \code{r} and \code{p}.
 }
   \item{structure}{
-Structure of \code{var(X|Y)}. The following options are available: \code{iso} for isotropic
+Structure of \code{var(X|Y)}. The following options are available: \code{"iso"} for isotropic
  (predictors, conditionally on the response, are independent and on the same measurement scale); 
- \code{aniso} for anisotropic (predictors, conditionally on the response, are independent and on different measurement scales); 
- \code{unstr} for unstructured variance. 
- The other structures (\code{iso2}, \code{aniso2}, \code{un.iso}, \code{un.aniso}, and \code{unstr2}) 
- refer to error structures for extended PFC models.
+ \code{"aniso"} for anisotropic (predictors, conditionally on the response, are independent and on different measurement scales); 
+ \code{"unstr"} for unstructured variance. The fourth structure \code{"unstr2"} refers to an extended PFC model
+ with an heterogenous error structure.
 }
   \item{eps_aniso}{Precision term used in estimating \code{var(X|Y)} for the anisotropic structure.
 }
@@ -51,28 +49,14 @@ where, conditionally on the response, the predictors are independent and are on 
 The sufficient reduction is \eqn{\Gamma^TX}. The anisotropic (\code{aniso}) PFC model assumes that 
 \eqn{\Delta=}diag\eqn{(\delta_1^2, ..., \delta_p^2)}, where the conditional predictors are independent and on different measurement scales.
 The unstructured (\code{unstr}) PFC model allows a general structure for \eqn{\Delta}. With the anisotropic and unstructured \eqn{\Delta}, the 
-sufficient reduction is \eqn{\Gamma^T \Delta^{-1}X}.[Note that \eqn{X \in R^{p}} while the data-matrix to use is in \eqn{R^{n \times p}}.] 
+sufficient reduction is \eqn{\Gamma^T \Delta^{-1}X}. it should be noted that \eqn{X \in R^{p}} while the data-matrix to use is in \eqn{R^{n \times p}}.] 
 
-Extended structures are considered with 
+The error structure of the extended structure has the following form 
 \deqn{\Delta=\Gamma \Omega \Gamma^T + \Gamma_0 \Omega_0 \Gamma_0^T,}
 %
 where \eqn{\Gamma_0} is the orthogonal completion of \eqn{\Gamma} such that \eqn{(\Gamma, \Gamma_0)} is a 
 \eqn{p \times p} orthogonal matrix. The matrices \eqn{\Omega \in R^{d \times d}} and \eqn{\Omega_0 \in 
-R^{(p-d) \times (p-d)}} are assumed to be symmetric and full-rank. The sufficient reduction is \eqn{\Gamma^{T}X}.
-
-The three aforementioned structures (isotropic, anisotropic and unstructured) are applied to \eqn{\Omega} and \eqn{\Omega_0}. 
-The following extended structures are implemented: 
-
-\code{iso2}: \eqn{\Omega=\omega^2 I_d} and \eqn{\Omega_0=\omega_0^2 I_{p-d}};
-
-\code{aniso2}: \eqn{\Omega=}diag\eqn{(\omega_1^2,...,\omega_d^2)} and \eqn{\Omega_0=}diag\eqn{(\omega_{01}^2,...,\omega_{0p}^2)};
-
-\code{un.iso}: \eqn{\Omega} is unstructured and \eqn{\Omega_0=\omega_0^2 I_{p-d}};
-
-\code{un.aniso}: \eqn{\Omega} is unstructured and \eqn{\Omega_0}=diag\eqn{(\omega_{01}^2,...,\omega_{0p}^2)};
-
-\code{unstr2}: both \eqn{\Omega} and \eqn{\Omega_0} are unstructured;
-
+R^{(p-d) \times (p-d)}} are assumed to be symmetric and full-rank. The sufficient reduction is \eqn{\Gamma^{T}X}. 
 Let \eqn{\mathcal{S}_{\Gamma}} be the subspace spanned by the columns of \eqn{\Gamma}. The parameter space of \eqn{\mathcal{S}_{\Gamma}} 
 is the set of all \eqn{d} dimensional subspaces in \eqn{R^p}, called Grassmann manifold
  and denoted by \eqn{\mathcal{G}_{(d,p)}}. 

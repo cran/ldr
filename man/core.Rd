@@ -6,14 +6,22 @@ Method to reduce sample covariance matrices to an informational core that is suf
 heterogeneity among different populations. 
 }
 \usage{
-core(X, y, numdir = 2, verbose = FALSE, short = TRUE, ...)
+core(X, y, Sigmas = NULL, ns = NULL, numdir = 2, verbose = FALSE, 
+    short = TRUE, ...)
 }
+%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{X}{
 Data matrix with \code{n} rows of observations and \code{p} columns of predictors. The predictors are assumed to have a continuous distribution.
 }
   \item{y}{
 Vector of group labels. Observations with the same label are considered to be in the same group.
+}
+  \item{Sigmas}{
+A list object of covariance matrices corresponding the different populations.
+}
+  \item{ns}{
+A vector of number of observations of the samples corrsponding to the different populations.
 }
   \item{numdir}{
 Integer between 1 and \code{p}. It is the number of directions to estimate for the reduction.
@@ -32,10 +40,12 @@ Other arguments to pass to \code{GrassmannOptim}.
 
 \details{
 Consider the problem of characterizing the covariance matrices \eqn{\Sigma_y, y=1,...,h}, of a random vector \eqn{X} observed in each of \eqn{h}
-normal populations. The goal is to find a semi-orthogonal matrix \eqn{\Gamma \in R^{p \times d}, d < p}, with the property that for any two populations \eqn{j} and 
+normal populations. Let \eqn{S_y = (n_y-1)\tilde{\Sigma_y}} where \eqn{\tilde{\Sigma_y}} is the sample covariance matrix corresponding to 
+\eqn{\Sigma_y}, and \eqn{n_y} is the number of observations corresponding to \eqn{y}. The goal is to find a semi-orthogonal matrix \eqn{\Gamma \in R^{p \times d}, d < p}, with the property that for any two populations \eqn{j} and 
 \eqn{k}
 \deqn{S_j|(\Gamma' S_j \Gamma=B, n_j=m) \sim S_k|(\Gamma' S_k \Gamma=B, n_k=m).}
-That is, \eqn{\Gamma' S \Gamma} is sufficient to account for the heterogeneity among the population covariance matrices.  
+That is, given \eqn{\Gamma' S_g \Gamma} and \eqn{n_g}, the conditional distribution of \eqn{S_g} must must depend on \eqn{g}. Thus 
+\eqn{\Gamma' S_g \Gamma} is sufficient to account for the heterogeneity among the population covariance matrices.  
 The central subspace \eqn{\mathcal{S}}, spanned by the columns of \eqn{\Gamma} is obtained by optimizing the following log-likelihood function
 \deqn{L(\mathcal{S})= c-\frac{n}{2} \log|\tilde{\Sigma}| + \frac{n}{2} \log|P_{\mathcal{S}} \tilde{\Sigma} P_{\mathcal{S}}|-\sum_{y=1}^{h}\frac{n_y}{2} \log|P_{\mathcal{S}} \tilde{\Sigma}_y P_{\mathcal{S}}|,} 
 where \eqn{c} is a constant depending only on \eqn{p} and \eqn{n_y}, \eqn{\tilde{\Sigma}_y, y=1,...,h,} denotes the sample covariance matrix
@@ -73,11 +83,12 @@ but they should not be treated as absolute quantities.
 \code{\link{lad}, \link{pfc}}
 }
 \examples{
+\dontrun{
 data(flea)
-Levels <- unique(flea[,1])
 X <- flea[,-1]
-y<-as.integer(factor(flea[,1], levels=Levels))
+y<-as.integer(factor(flea[,1], levels=unique(flea[,1])))
 fit <- core(X=as.matrix(X), y=y, numdir=1, verbose=TRUE, short=FALSE)
 summary(fit)
+}
 }
 

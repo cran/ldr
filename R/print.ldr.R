@@ -11,7 +11,13 @@ function(x,...)
 		
 		if (x$model=="pfc")
 		{ 
-			print(round(x$Gammahat[[x$numdir]], digits=4)) 
+			if ((x$structure == "aniso") | (x$structure=="unstr"))
+			{
+				print(round(OrthoNorm(solve(x$Deltahat[[x$numdir]])%*%x$Gammahat[[x$numdir]]), digits=4)) 
+			} else {
+			
+				print(round(x$Gammahat[[x$numdir]], digits=4)) 
+			}
 		} 
 		else  print(round(x$Gammahat[[x$numdir+1]], digits=4))
 	}
@@ -19,6 +25,14 @@ function(x,...)
 	{
 		cat("\n\nEstimated Basis Vectors for Central Subspace:\n");
 
-		print(round(x$Gammahat, digits=4)); cat("\n"); 
+        	if (x$model=="pfc")
+		{ 
+			if ((x$structure == "aniso") | (x$structure=="unstr"))
+			{
+				print(round(OrthoNorm(solve(x$Deltahat)%*%x$Gammahat), digits=4)) 
+			} else {
+				print(round(x$Gammahat, digits=4)); cat("\n"); 
+			}
+		} else print(round(x$Gammahat, digits=4)); cat("\n"); 
 	}
 }
