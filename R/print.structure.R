@@ -1,17 +1,14 @@
-print.structure <-
-function (x,...) 
+print.structure <- 
+function(x,...) 
 {
 	cat("\nLikelihood Ratio Test:\n");
-
-	cat("Testing the hypotheses \n NH: Structure=", x$IC[1,1], "\n AH: Structure=", x$IC[2,1], "\n\n");
+	cat("NH: structure=", colnames(x$AIC)[1], "\n");
+	cat("AH: structure=", colnames(x$AIC)[2], "\n");
 
 	print(x$LRT);
-
 	cat("\nInformation Criteria:\n");
 
-	print(x$IC);
-
-	cat("----------\nNote on Structure: \niso -> isotropic \naniso -> anisotropic \nunstr -> unstructured\n")
-
+	outic <- data.frame(rbind(x$AIC, x$BIC)); rownames(outic) <- c("aic", "bic");
+	print(outic)
 	invisible(x)
 }

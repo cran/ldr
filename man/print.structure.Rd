@@ -1,21 +1,20 @@
 \name{print.structure}
-\alias{structure}
 \alias{print.structure}
 \title{
 Internal function for ldr.
 }
 \description{
-Internal function to print structure object of pfc.
+Internal function to print a the test of structure of \code{pfc} objects.
 }
 \usage{
 \method{print}{structure}(x,...)
 }
 \arguments{
   \item{x}{
-An object of class \code{ldr}, fit with \code{pfc}, \code{lad}, or \code{core}.
-}
-  \item{...}{
-Other arguments to generic print method.
+An object of class \code{structure} obtained using the function \code{structure.test}.
 }
 }
-\keyword{internal}
+\author{
+Kofi Placid Adragni <kofi@umbc.edu>
+}
+\keyword{internal} 

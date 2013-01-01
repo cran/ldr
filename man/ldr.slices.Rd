@@ -4,11 +4,11 @@
 Function to slice continuous response.
 }
 \description{
-Divides a vector of length \code{n} into slices of approximately equal size. It is used to construct the piecewise bases, and 
+Divides a vector of length \code{n} into slices of approximately equal size. It is used to construct the piecewise bases, and
 internally used in \code{lad} functions.
 }
 \usage{
-ldr.slices(y, nslices)
+ldr.slices(y, nslices = 3)
 }
 \arguments{
   \item{y}{
@@ -19,8 +19,8 @@ the number of slices, no larger than \code{n}.
 }
 }
 \details{
-The number of observations per slice \code{m} is computed as the largest integer less or equal to \code{n/nslices}. 
-The \code{n} observations of \code{y} are ordered in the increasing order. 
+The number of observations per slice \code{m} is computed as the largest integer less or equal to \code{n/nslices}.
+The \code{n} observations of \code{y} are ordered in the increasing order.
 The first set of first \code{m} observations is allocated to the first slice, the second set is allocated into the second slice, and so on.
 }
 \value{
