@@ -1,5 +1,6 @@
 ldr <-
-function(X, y=NULL, fy=NULL, Sigmas=NULL, ns=NULL, numdir=NULL, nslices=NULL, model=c("core", "lad", "pfc"), numdir.test=FALSE,...)
+function(X, y=NULL, fy=NULL, Sigmas=NULL, ns=NULL, numdir=NULL, nslices=NULL, 
+model=c("core", "lad", "pfc"), numdir.test=FALSE, ...)
 {
 	if (model=="pfc")
 	{	

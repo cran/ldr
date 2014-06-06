@@ -2,8 +2,8 @@ lad <-
 function(X, y, numdir=NULL, nslices=NULL, numdir.test=FALSE,...)
 {
 	mf <- match.call();
-	op <- dim(X); p <- op[2]; n <- op[1]; yy <- y;
-	verbose <- mf$verbose; if (is.null(verbose)) verbose=FALSE; yfactor <- FALSE;
+	op <- dim(X); p <- op[2]; n <- op[1]; yy <- y; yfactor <- FALSE
+	verbose <- mf$verbose; if (is.null(verbose)) verbose=FALSE;
 
 	if (is.factor(y)) {yy <- as.vector(as.integer(factor(y, levels=unique(y)))); yfactor <- TRUE}
 	if (n != length(yy)) stop("X and y do not have the same number of observations") 
@@ -13,7 +13,7 @@ function(X, y, numdir=NULL, nslices=NULL, numdir.test=FALSE,...)
 	if (is.null(vnames)) vnames <- paste("X", 1:p, sep="");
 
 	X <- as.matrix(X);
-	Sigmatilde <- cov(X);
+	Sigmatilde <- cov(X); 
 
 	if (is.null(nslices)) if (verbose) message("The response is treated as categorical.")
 
@@ -31,7 +31,7 @@ function(X, y, numdir=NULL, nslices=NULL, numdir.test=FALSE,...)
 		{	
 			N_y[i] <- length(yy[yy==groups[i]]);
 			X_y <- X[which(yy == groups[i]),]; 
-			Deltatilde_y[[i]] <- cov(X_y);
+			Deltatilde_y[[i]] <- cov(X_y); 
 		}		
 	} 
 	
@@ -49,38 +49,12 @@ function(X, y, numdir=NULL, nslices=NULL, numdir.test=FALSE,...)
 		{	
 			N_y[i] <- sum(ysort$slice.indicator==i);
 			X_y <- X[which(ysort$slice.indicator == i),]; 
-			Deltatilde_y[[i]] <- cov(X_y);
+			Deltatilde_y[[i]] <- cov(X_y); 
 		}
 	}
 	Sigmas <- list(Sigmatilde=Sigmatilde, Deltatilde_y=Deltatilde_y, N_y=N_y);
-  	Deltatilde <- 0;
+  Deltatilde <- 0;
 	for (i in 1:use.nslices) Deltatilde <- Deltatilde + N_y[i] * Deltatilde_y[[i]];
-
-	orthonorm <- function(u) 
-	{
-		if (is.null(u)) return(NULL)
-		if (!(is.matrix(u))) u <- as.matrix(u);
-		dd <- dim(u); n <- dd[1]; p <-dd[2];
-
-		if (prod(abs(La.svd(u)$d) > 1e-08) == 0) stop("collinears vectors in orthonorm")
-		if (n < p)
-		{
-			warning("There are too much vectors to orthonormalize in orthonorm.")
-			u <- as.matrix(u[, 1:p])
-			n <- p
-    		}
-    		v <- u;
-    		if (p > 1)
-		{
-			for (i in 2:p)
-			{
-				coef.proj <- c(crossprod(u[, i], v[, 1:(i - 1)]))/diag(crossprod(v[, 1:(i - 1)]));
-				v[, i] <- u[, i] - matrix(v[, 1:(i - 1)], nrow = n) %*% matrix(coef.proj, nrow = i - 1)
-			}
-    		}
-		coef.proj <- 1/sqrt(diag(crossprod(v)))
-		return(t(t(v) * coef.proj))
-	}
 
 	InitialMatrix <- function(X, y, nslices)
 	{
@@ -270,7 +244,7 @@ function(X, y, numdir=NULL, nslices=NULL, numdir.test=FALSE,...)
 
 		ans <- list(R=R, Gammahat=fit$Gammahat, Deltahat=fit$Deltahat, Deltahat_y=fit$Deltahat_y, 
 			 loglik=fit$loglik, aic=fit$aic, bic=fit$bic, numpar=fit$numpar, numdir=numdir, 
-			 y=y, yfactor=yfactor, model="lad", call=match.call(expand.dots=TRUE),numdir.test=numdir.test);
+			 yfactor=yfactor, y=y, model="lad", call=match.call(expand.dots=TRUE),numdir.test=numdir.test);
 		class(ans) <- "lad";	
 		return(invisible(ans));	
 	}
@@ -293,7 +267,7 @@ function(X, y, numdir=NULL, nslices=NULL, numdir.test=FALSE,...)
 
 	ans <- list(R=R, Gammahat=Gammahat, Deltahat=Deltahat, Deltahat_y=Deltahat_y, loglik=loglik, aic=aic, 
 			bic=bic, numpar=numpar, numdir=numdir, model="lad", call=match.call(expand.dots=TRUE), 
-			y=y, yfactor=yfactor, numdir.test=numdir.test);
+			yfactor=yfactor, y=y, numdir.test=numdir.test);
 	class(ans)<- "lad";
 	return(invisible(ans))
 }

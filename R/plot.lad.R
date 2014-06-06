@@ -3,7 +3,7 @@ function(x,...)
 {
 	ans <- summary.lad(x);
 
-	if (!(ans$yfactor))
+	if (!ans$yfactor)
 	{
 		dd <- NCOL(ans$R);
 
