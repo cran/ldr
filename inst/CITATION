@@ -1,6 +1,20 @@
-bibentry(bibtype = "Manual",
-         title = "Methods for likelihood-based dimension reduction in regression",
-         author = c(person("Kofi", "Adragni"),
-                    person("Andrew", "Raim")),
-         year = 2014,
-         url = "http://CRAN.R-project.org/package=ldr")
+citHeader("To cite ldr in publications use:")
+
+citEntry(entry = "Article",
+  title        = "{ldr}: An {R} Software Package for Likelihood-Based Sufficient Dimension Reduction",
+  author       = personList(as.person("Kofi P. Adragni"),
+                   as.person("Andrew M. Raim")),
+  journal      = "Journal of Statistical Software",
+  year         = "2014",
+  volume       = "61",
+  number       = "3",
+  pages        = "1--21",
+  url          = "http://www.jstatsoft.org/v61/i03/",
+
+  textVersion  =
+  paste("Kofi P. Adragni, Andrew M. Raim (2014).",
+        "ldr: An R Software Package for Likelihood-Based Sufficient Dimension Reduction.",
+        "Journal of Statistical Software, 61(3), 1-21.",
+        "URL http://www.jstatsoft.org/v61/i03/.")
+)
+
